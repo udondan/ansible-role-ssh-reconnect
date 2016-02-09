@@ -2,13 +2,8 @@
 
 - name: Kill own ssh connections
   ssh_reconnect:
-  failed_when: false
-  changed_when: true
 
 - name: Kill all ssh connections
   ssh_reconnect: all=True
-  become: yes
-  failed_when: false
-  changed_when: true
 
 ...
