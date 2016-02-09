@@ -1,0 +1,14 @@
+---
+
+galaxy_info:
+  author: Daniel Schroeder <deemes79@gmai.com>
+  description: Kill all open ssh connections to force ansible to re-connect at next task
+  min_ansible_version: 2.0.0.1
+  categories:
+    - system
+    - ssh
+  license: MIT
+  dependencies: &dep []
+dependencies: *dep
+
+...

@@ -1,0 +1,5 @@
+---
+
+# No tasks available. This role provides handlers which can be called. If you want to trigger a ssh reconect from your role, add a dependency to this role and then call the handlers as required.
+
+...
