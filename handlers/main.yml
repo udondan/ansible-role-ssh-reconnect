@@ -1,9 +1,9 @@
 ---
 
 - name: Kill own ssh connections
-  ssh_reconnect:
+  ssh-reconnect:
 
 - name: Kill all ssh connections
-  ssh_reconnect: all=True
+  ssh-reconnect: all=True
 
 ...
