@@ -1,7 +1,7 @@
 ssh reconnect
 =============================
 
-The `ssh_reconnect` role provides two handlers you can use in your roles:
+The `ssh-reconnect` role provides two handlers you can use in your roles:
 
  - `Kill own ssh connections`: Kills all open ssh connections of the current user
  - `Kill all ssh connections`: Kills all open ssh connections of any user
