@@ -29,7 +29,7 @@ By default (when none of the parameters is set) all ssh connections of the user 
 Kill own ssh connections:
 ```yml
 - name: Kill own ssh connections
-  ssh-reconnect: all=True
+  ssh-reconnect:
 ```
 
 Kill all ssh connections:
@@ -40,6 +40,6 @@ Kill all ssh connections:
 
 Kill ssh connections of user foo
 ```yml
-- name: Kill all ssh connections
+- name: Kill all ssh connections of user foo
   ssh-reconnect: user=foo
 ```
