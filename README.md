@@ -1,5 +1,4 @@
-ssh reconnect
-=============================
+# ssh reconnect
 
 The `ssh-reconnect` role provides two handlers you can use in your roles:
 
@@ -16,7 +15,7 @@ Before you can use the handlers you need to add the role to your playbook or as 
 
 There also is a module (or better action-plugin) you can use to directly kill ssh-connections without a handler.
 
-###Parameters
+## Parameters
 
  - `user`: Name of the user whose ssh connections should be killed
  - `all`: Set to `True` if all ssh connections of all users should be killed
@@ -24,7 +23,7 @@ There also is a module (or better action-plugin) you can use to directly kill ss
 By default (when none of the parameters is set) all ssh connections of the user you connect as will be killed.
 
 
-###Examples
+## Examples
 
 Kill own ssh connections:
 ```yml
