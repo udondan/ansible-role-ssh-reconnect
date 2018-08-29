@@ -50,7 +50,7 @@ class ActionModule(ActionBase):
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
-        if "Write failed: Broken pipe" in err or "Shared connection to" in err or "Connection to %s closed by remote host" % self._connection.host in err or "OTHERUSER" in out:
+        if "Write failed: Broken pipe" in str(err) or "Shared connection to" in str(err) or "Connection to %s closed by remote host" % self._connection.host in str(err) or "OTHERUSER" in str(out):
             result['failed'] = False
         else:
             result['failed'] = True
