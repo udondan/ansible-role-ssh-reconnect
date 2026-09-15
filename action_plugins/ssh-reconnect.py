@@ -39,7 +39,11 @@ class ActionModule(ActionBase):
 
         command +=  " && exit"
 
-        sub = subprocess.Popen(["ssh", '-tt', '-n', '-S', 'none', self._play_context.remote_user + '@' + self._connection.host, command % grep],
+        target = self._connection.host
+        if self._play_context.remote_user:
+            target = "%s@%s" % (self._play_context.remote_user, target)
+
+        sub = subprocess.Popen(["ssh", '-tt', '-n', '-S', 'none', target, command % grep],
                                 shell=False,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
