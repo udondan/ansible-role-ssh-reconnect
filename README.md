@@ -22,6 +22,17 @@ There also is a module (or better action-plugin) you can use to directly kill ss
 
 By default (when none of the parameters is set) all ssh connections of the user you connect as will be killed.
 
+## Connection
+
+The action plugin opens its own ssh connection from the controller instead of reusing Ansible's. It passes these connection variables to `ssh`:
+
+ - `ansible_host` and `ansible_user`
+ - `ansible_port`
+ - `ansible_ssh_private_key_file`
+ - `ansible_ssh_common_args` and `ansible_ssh_extra_args`
+
+Anything else, such as `ansible_ssh_args`, is not used and comes from your `~/.ssh/config`. Password authentication (`ansible_ssh_pass`) is not supported. Killing the sessions requires passwordless `sudo` on the target.
+
 
 ## Examples
 
