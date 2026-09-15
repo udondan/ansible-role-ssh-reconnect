@@ -6,10 +6,19 @@ from ansible.module_utils.common.text.converters import to_text
 import subprocess
 import re
 import os
+import shlex
 
 class ActionModule(ActionBase):
 
     TRANSFERS_FILES = False
+
+    def _conn_opt(self, name):
+        # prefer the connection plugin's resolved option, fall back to the play context
+        # for connection plugins or Ansible versions that don't define it
+        try:
+            return self._connection.get_option(name)
+        except Exception:
+            return getattr(self._play_context, name, None)
 
     def run(self, tmp=None, task_vars=None):
 
@@ -44,7 +53,25 @@ class ActionModule(ActionBase):
         if self._play_context.remote_user:
             target = "%s@%s" % (self._play_context.remote_user, target)
 
-        sub = subprocess.Popen(["ssh", '-tt', '-n', '-S', 'none', target, command % grep],
+        ssh_cmd = ["ssh", '-tt', '-n', '-S', 'none']
+
+        port = self._conn_opt('port')
+        if port:
+            ssh_cmd += ['-p', str(port)]
+
+        private_key_file = self._conn_opt('private_key_file')
+        if private_key_file:
+            ssh_cmd += ['-i', os.path.expanduser(private_key_file)]
+
+        # ssh_args is skipped on purpose, its ControlMaster defaults clash with -S none
+        for name in ('ssh_common_args', 'ssh_extra_args'):
+            args = self._conn_opt(name)
+            if args:
+                ssh_cmd += shlex.split(args)
+
+        ssh_cmd += [target, command % grep]
+
+        sub = subprocess.Popen(ssh_cmd,
                                 shell=False,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
