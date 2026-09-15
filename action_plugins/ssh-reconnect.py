@@ -25,6 +25,14 @@ class ActionModule(ActionBase):
         if task_vars is None:
             task_vars = dict()
 
+        result = super(ActionModule, self).run(tmp, task_vars)
+
+        # a local connection has no ssh session to reconnect
+        if 'local' in (self._connection.transport, self._play_context.connection):
+            result['skipped'] = True
+            result['msg'] = 'connection is local, no ssh session to reconnect'
+            return result
+
         if "all" in self._task.args:
             all = self._task.args.get("all")
             if all == "True" or all == "true" or all == "Yes" or all == "yes": # oh dear
@@ -49,7 +57,9 @@ class ActionModule(ActionBase):
 
         command +=  " && exit"
 
-        target = self._connection.host
+        # only the ssh connection plugin sets host
+        host = getattr(self._connection, 'host', None) or self._play_context.remote_addr
+        target = host
         if self._play_context.remote_user:
             target = "%s@%s" % (self._play_context.remote_user, target)
 
@@ -82,9 +92,7 @@ class ActionModule(ActionBase):
 
         os.system('stty sane')
 
-        result = super(ActionModule, self).run(tmp, task_vars)
-
-        if "Write failed: Broken pipe" in err or "Shared connection to" in err or "Connection to %s closed by remote host" % self._connection.host in err or "OTHERUSER" in out:
+        if "Write failed: Broken pipe" in err or "Shared connection to" in err or "Connection to %s closed by remote host" % host in err or "OTHERUSER" in out:
             result['failed'] = False
         else:
             result['failed'] = True

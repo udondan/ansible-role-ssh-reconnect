@@ -33,6 +33,8 @@ The action plugin opens its own ssh connection from the controller instead of re
 
 Anything else, such as `ansible_ssh_args`, is not used and comes from your `~/.ssh/config`. Password authentication (`ansible_ssh_pass`) is not supported. Killing the sessions requires passwordless `sudo` on the target.
 
+With `connection: local` there is no ssh session to reconnect, so the handlers and the action plugin skip without doing anything.
+
 
 ## Examples
 
