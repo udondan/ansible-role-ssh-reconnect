@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 from ansible.plugins.action import ActionBase
 from ansible.errors import AnsibleError
+from ansible.module_utils.common.text.converters import to_text
 import subprocess
 import re
 import os
@@ -49,6 +50,8 @@ class ActionModule(ActionBase):
                                 stderr=subprocess.PIPE)
 
         out, err = sub.communicate()
+        out = to_text(out, errors='surrogate_or_strict')
+        err = to_text(err, errors='surrogate_or_strict')
 
         os.system('stty sane')
 
